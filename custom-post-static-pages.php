@@ -59,7 +59,7 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 			foreach ($_types as $_type) :
 				if ( !strpos($_type, 'acf') ) :
 
-					register_setting('reading', 'tvfh_' . $_type . '_page');
+					register_setting('reading', 'ldps_' . $_type . '_page');
 
 				endif;
 			endforeach;
@@ -86,15 +86,15 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 					// Args
 					$args = array(
 						'post_type' => 'page',
-						'name' => 'tvfh_' . $_type . '_page',
-						'id' => 'tvfh_' . $_type . '_page',
+						'name' => 'ldps_' . $_type . '_page',
+						'id' => 'ldps_' . $_type . '_page',
 						'show_option_none' => 'Select Page',
 						'echo' => 1,
-						'selected' => get_option('tvfh_' . $_type . '_page'),
+						'selected' => get_option('ldps_' . $_type . '_page'),
 					);
 
 					// Return list items with dropdown
-					echo '<li><label for="tvfh_' . $_type . '_page">' . ucfirst($_type) . ' Page: ';
+					echo '<li><label for="ldps_' . $_type . '_page">' . ucfirst($_type) . ' Page: ';
 						wp_dropdown_pages($args);
 					echo '</label></li>';
 
