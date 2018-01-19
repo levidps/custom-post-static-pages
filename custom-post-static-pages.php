@@ -25,15 +25,14 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/* Prevent Direct Access */
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/** Check if function exists */
 if ( !function_exists('ldps_custom_posts_init') ) :
 
+	/** Init Funciton */
 	function ldps_custom_posts_init() {
-
-		/**
-		 * Add index page options to the BE for events & sponsors
-		 */
 
 		/* Create Settings Section */
 		add_settings_section(
@@ -52,9 +51,14 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 			'ldps_custom_post_section'
 		);
 
+		/** Get Custom Post Types */
 		$_type_args = array('_builtin' => false );
 		$_types = get_post_types($_type_args, 'names');
 
+		/** 
+		 * For each post type register setting
+		 * - skip any post type that includes 'acf'
+		 */
 		if ($_types) :
 			foreach ($_types as $_type) :
 				if ( !strpos($_type, 'acf') ) :
@@ -67,23 +71,30 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 
 	}
 
-	/** Init settings on Admin Init */
+	/** On Admin Init -> init settings function */
 	add_action('admin_init', 'ldps_custom_posts_init');
 
+	/** Call back to create dropdowns */
 	function ldps_page_indexes_callback() {
+
+		/** Get Custom Post Types */
 		$_type_args = array('_builtin' => false );
 		$_types = get_post_types($_type_args, 'names');
 
+		/** If gets $_types return elements */
 		if ($_types) :
 
 			// Wrapper Element
 			echo '<ul>';
 
-			// For each post type
+			/** 
+			 * For each post type create page dropdown
+			 * - skip any post type that includes 'acf'
+			 */
 			foreach ($_types as $_type) :
 				if ( strpos($_type, 'acf') === false ) :
 
-					// Args
+					/** Menu Dropdown Args */
 					$args = array(
 						'post_type' => 'page',
 						'name' => 'ldps_' . $_type . '_page',
@@ -93,7 +104,7 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 						'selected' => get_option('ldps_' . $_type . '_page'),
 					);
 
-					// Return list items with dropdown
+					/** Return Menu Dropdown with $options selected */
 					echo '<li><label for="ldps_' . $_type . '_page">' . ucfirst($_type) . ' Page: ';
 						wp_dropdown_pages($args);
 					echo '</label></li>';
