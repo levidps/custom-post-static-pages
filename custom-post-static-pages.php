@@ -55,7 +55,7 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 		$_type_args = array('_builtin' => false );
 		$_types = get_post_types($_type_args, 'names');
 
-		/** 
+		/**
 		 * For each post type register setting
 		 * - skip any post type that includes 'acf'
 		 */
@@ -87,7 +87,7 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 			// Wrapper Element
 			echo '<ul>';
 
-			/** 
+			/**
 			 * For each post type create page dropdown
 			 * - skip any post type that includes 'acf'
 			 */
@@ -106,7 +106,7 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 
 					/** Return Menu Dropdown with $options selected */
 					echo '<li><label for="ldps_' . $_type . '_page">' . ucfirst($_type) . ' Page: ';
-						wp_dropdown_pages($args);
+					wp_dropdown_pages($args);
 					echo '</label></li>';
 
 				endif;
@@ -115,6 +115,29 @@ if ( !function_exists('ldps_custom_posts_init') ) :
 			echo '</ul>';
 
 		endif;
+	}
+
+	/**
+	 * Function for if page is static page for custom post type
+	 *
+	 * @var arg {custom post type}
+	 * @return boolean
+	 */
+	function is_custom_posts_page( $arg ) {
+		global $wp_query;
+		$queried_obj = $wp_query->queried_object;
+
+		// Ensure global query is correct (taken from WP core for is_front_page()
+		if ( ! isset( $wp_query ) ) {
+			_doing_it_wrong( __FUNCTION__, __( 'Conditional query tags do not work before the query is run. Before then, they always return false.' ), '3.1.0' );
+			return false;
+		}
+
+		// Compare queried page ID to options storage
+		if ( get_option( 'ldps_' . $arg . '_page' ) == $queried_obj->ID )
+			return true;
+		else
+			return false;
 	}
 
 endif;
